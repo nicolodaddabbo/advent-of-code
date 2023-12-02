@@ -1,21 +1,20 @@
-def getNumber(line):
+def find_number_in_line(line):
+    for c in line:
+        if c.isnumeric():
+            return c
+        
+def get_number(line):
     x, y = 0, 0
-    for c in line:
-        if c.isnumeric():
-            x = c
-            break
+    x = find_number_in_line(line)
     line = line[::-1]
-    for c in line:
-        if c.isnumeric():
-            y = c
-            break
+    y = find_number_in_line(line)
     return int(x + y)
 
 def main():
     f = open('input.txt', 'r')
     result = 0
     for line in f:
-        n = getNumber(line)
+        n = get_number(line)
         result += n
     print(result)
     f.close()

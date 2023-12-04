@@ -6,8 +6,9 @@
 #define MAX_GREEN 13
 #define MAX_BLUE 14
 #define MAX_LINE 200
+#define INFINITE 100
 
-int validate_game_data(char line[]);
+int validate_game_data(char line[], int part);
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
     char line[MAX_LINE];
     int possible_games = 0;
     int id;
+    int power = 0;
 
     fp = fopen("input.txt", "r");
 
@@ -26,19 +28,25 @@ int main(int argc, char *argv[])
 
     while (fgets(line, MAX_LINE, fp) != NULL)
     {
-        id = validate_game_data(line);
-        if (id != -1) {
-            possible_games += id;
-        }
+        power += validate_game_data(line, 1);
+        // id = validate_game_data(line, 0);
+        // if (id != -1) {
+        //     possible_games += id;
+        // }
     }
 
     printf("\nPossible games: %d\n", possible_games);
+    printf("\nGame power: %d\n", power);
     fclose(fp);
     return 0;
 }
 
-int validate_game_data(char line[])
+int validate_game_data(char line[], int part)
 {
+    if (part >= 2) {
+        printf("\nPart must be 0 (part 1) or 1 (part 2)");
+        return -1;
+    }
     char *game_id;
     char *token = strtok(line, " :,;");
     char *tokenized_line[MAX_LINE];
@@ -73,5 +81,9 @@ int validate_game_data(char line[])
         }
     }
 
-    return red <= MAX_RED && green <= MAX_GREEN && blue <= MAX_BLUE ? atoi(game_id) : -1;
+    if (part == 0) {
+       return red <= MAX_RED && green <= MAX_GREEN && blue <= MAX_BLUE ? atoi(game_id) : -1;
+    } else {
+        return red * green * blue;
+    }
 }
